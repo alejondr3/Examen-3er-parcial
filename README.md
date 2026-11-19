@@ -5,7 +5,7 @@ Solución en C++ del ejercicio 38, página 41 del práctico. Cada programa usa �
 - `ejercicio38_struct.cpp`: modelo procedural con `struct Nodo`, `struct Cola` y funciones externas.
 - `ejercicio38_class.cpp`: modelo con `class Cola`, nodos y punteros privados, constructor, destructor y métodos públicos.
 
-Cada archivo es un programa independiente con su propio `main`. Se deben compilar por separado. Al ejecutarlos muestran los cuatro casos del enunciado y extraen los elementos en orden FIFO. Para cambiar los ejemplos, modificar las llamadas a `enqueue` en `demostrarCaso`.
+Cada archivo es un programa independiente con su propio `main`. Se deben compilar por separado. Al ejecutarlos, cada programa pide por teclado la cantidad de elementos de A y sus valores, y luego los de B. Ingresar un entero por línea; una cantidad de 0 deja la cola vacía. Se rechazan cantidades negativas, texto, decimales y valores fuera del rango de `int`. Si termina la entrada antes de completar la carga, el programa libera los nodos y termina con código 1. Después muestra ambas colas, concatena B al final de A, muestra el resultado y extrae los elementos en orden FIFO.
 
 ## Compilar y ejecutar
 
@@ -141,15 +141,7 @@ Verificado con GCC 15.1.0, C++11 y `-Wall -Wextra -Wpedantic -Werror`: ambos pro
 | A=[1,2,3], B=[] | [1,2,3] | [] |
 | A=[], B=[] | [] | [] |
 
-Pruebas adicionales automatizadas realizadas durante la preparación:
-
-- Consultar y extraer en vacío devuelve `false` sin cambiar el argumento de salida.
-- Valores negativos, cero y repetidos conservan su orden.
-- Reutilizar A y B después de vaciarlas o transferir sus nodos funciona correctamente.
-- Autoconcatenar una cola vacía o de un nodo conserva su estado.
-- Concatenaciones sucesivas después de una extracción parcial conservan FIFO.
-- Transferir y extraer 10.000 nodos conserva la secuencia completa.
-- Un contador de reservas y liberaciones comprobó que `concatenate` no ejecuta ninguna de ellas. Cada versión terminó con 10.022 reservas y 10.022 liberaciones, sin fallos en las comprobaciones. También se comprobó la liberación automática de nodos restantes por el destructor de class.
+Pruebas de la entrada interactiva: ambos programas producen salidas idénticas en 10 casos que cubren las cuatro combinaciones de colas vacías/no vacías, negativos, cero, repetidos, entradas inválidas (texto, cantidades negativas, decimales, enteros fuera de rango y caracteres sobrantes), entrada incompleta y último valor sin salto de línea.
 
 ## Respuestas para la defensa
 
