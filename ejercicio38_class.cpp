@@ -83,19 +83,58 @@ public:
     }
 };
 
-void demostrarCaso(int caso, bool llenarA, bool llenarB) {
+// Lee un entero por linea y vuelve a pedirlo si la entrada no es valida.
+bool leerEntero(const char* mensaje, int& valor) {
+    while (true) {
+        cout << mensaje;
+        if (cin >> valor) {
+            bool valido = true;
+            char caracter;
+            while (cin.get(caracter) && caracter != '\n') {
+                if (caracter != ' ' && caracter != '\t' && caracter != '\r')
+                    valido = false;
+            }
+            if (valido) return true;
+            cout << "Entrada invalida. Ingrese un numero entero.\n";
+            if (cin.eof()) return false;
+        } else {
+            if (cin.eof() || cin.bad()) return false;
+            cin.clear();
+            char caracter;
+            while (cin.get(caracter) && caracter != '\n') {}
+            cout << "Entrada invalida. Ingrese un numero entero.\n";
+            if (cin.eof()) return false;
+        }
+    }
+}
+
+bool cargarCola(Cola& cola, const char* nombre) {
+    cout << "\nCola " << nombre << "\n";
+    int cantidad = 0;
+    do {
+        if (!leerEntero("Cantidad de elementos (0 para dejarla vacia): ", cantidad))
+            return false;
+        if (cantidad < 0) cout << "La cantidad no puede ser negativa.\n";
+    } while (cantidad < 0);
+
+    for (int i = 0; i < cantidad; ++i) {
+        cout << "Elemento " << i + 1 << " de " << cantidad << "\n";
+        int dato = 0;
+        if (!leerEntero("Valor entero: ", dato)) return false;
+        cola.enqueue(dato);
+    }
+    return true;
+}
+
+int main() {
     Cola a;
     Cola b;
-    if (llenarA) {
-        a.enqueue(1);
-        a.enqueue(2);
-        a.enqueue(3);
+    cout << "Concatenacion de dos colas\n";
+    if (!cargarCola(a, "A") || !cargarCola(b, "B")) {
+        cout << "\nEntrada finalizada. No se completo la carga de datos.\n";
+        return 1;
     }
-    if (llenarB) {
-        b.enqueue(4);
-        b.enqueue(5);
-    }
-    cout << "Caso " << caso << "\nAntes:\nA = ";
+    cout << "\nAntes:\nA = ";
     a.mostrar();
     cout << "B = ";
     b.mostrar();
@@ -110,13 +149,5 @@ void demostrarCaso(int caso, bool llenarA, bool llenarB) {
     cout << "Extraccion FIFO de A:";
     while (a.dequeue(dato)) cout << " " << dato;
     cout << "\n\n";
-    // Los destructores liberan cualquier nodo restante al salir.
-}
-
-int main() {
-    demostrarCaso(1, true, true);
-    demostrarCaso(2, false, true);
-    demostrarCaso(3, true, false);
-    demostrarCaso(4, false, false);
     return 0;
 }
